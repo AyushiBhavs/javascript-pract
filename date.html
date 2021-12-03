@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+  <script>
+
+    var arr = [
+      {
+        name: "ayushi",
+        doj: "1-11-2021"
+      },
+      {
+        name: "abhishek",
+        doj: "5-11-2021"
+      },
+      {
+        name: "aman",
+        doj: "2-11-2021"
+      },
+      {
+        name: "nandini",
+        doj: "13-11-2021"
+      },
+      {
+        name: "aman",
+        doj: "4-11-2021"
+      }
+    ]
+
+    const sorter = (a, b) => {
+      return new Date(a.doj) - new Date(b.doj);
+    }
+
+    console.log(arr.sort(sorter));
+
+
+  </script>
+</body>
+
+</html>

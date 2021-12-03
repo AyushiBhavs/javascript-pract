@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+  <button onclick="getData()">step by step</button>
+
+  <script>
+    function* steps() {
+      let a = 10;
+      let b = 20;
+      console.log(10 + 20)
+      yield '1 step is completed'
+      console.log(20 - 10)
+      yield '2 step is completed'
+      console.log(10 * 20)
+      yield '3 step is completed'
+      return 'all done';
+    }
+
+
+    let stp = steps()
+
+    function getData() {
+      console.log(stp.next());
+    }
+
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <script src="https://raw.githack.com/SortableJS/Sortable/master/Sortable.js"></script>
+  <title>todo list</title>
+  <style>
+    #listItem li {
+      display: flex;
+      justify-content: space-between;
+      border: 1px solid red;
+      padding: 10px;
+      margin: 5px;
+      cursor: grab;
+    }
+
+    #error {
+      margin-left: 200px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container mt-5">
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-8">
+        <div class="card">
+          <div class="card-body">
+            <h2 class="card-title text-center text-primary"> Todo List </h2>
+            <div class="form-content d-flex justify-content-center mt-4">
+              <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="text" placeholder="Enter your Name" id="inputName">
+                <input class="form-control mr-sm-2" type="button" value="Add" onclick="myFunction()">
+              </form>
+            </div>
+            <span id="error" class="text-danger mt-5"></span>
+
+            <ul class="list-group mt-5 " id="listItem">
+
+            </ul>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+
+    function myFunction(a = "") {
+      let inputValue = ""
+      if (a != "") {
+        inputValue = a
+      } else {
+        inputValue = document.getElementById("inputName").value
+        if (inputValue != "") {
+          let arr = JSON.parse(window.localStorage.getItem("name"));
+          if (!arr) {
+            arr = [];
+            arr.push(inputValue);
+            window.localStorage.setItem("name", JSON.stringify(arr))
+          }
+          else {
+            arr.push(inputValue);
+            window.localStorage.setItem("name", JSON.stringify(arr))
+          }
+        }
+      }
+      document.getElementById("error").innerHTML = "";
+      if (inputValue === "") {
+        document.getElementById("error").innerHTML = "please enter Name";
+      } else {
+        const listItem = document.getElementById("listItem")
+        listItem.append(createMenuItem(inputValue))
+      }
+      document.getElementById("inputName").value = ""
+    }
+
+
+    function createMenuItem(name) {
+      const liElement = document.createElement("li");
+      liElement.textContent = name;
+      liElement.appendChild(removeListItem(name, liElement))
+      return liElement;
+    }
+
+
+    function removeListItem(rid, liElement) {
+      const closeBtn = document.createElement("closeBtn")
+      closeBtn.textContent = "x"
+      closeBtn.addEventListener('click', () => { removeItem(rid), liElement.remove() });
+      console.log(rid, liElement)
+      return closeBtn;
+    }
+
+
+
+    function onLoad() {
+      let arr = JSON.parse(window.localStorage.getItem("name"));
+      // console.log(arr.length)
+      if (arr != null) {
+        for (let a of arr) {
+          myFunction(a);
+        }
+      }
+    }
+    onLoad()
+
+
+    function removeItem(inputValue) {
+      let arr = JSON.parse(window.localStorage.getItem("name"));
+      if (arr.length) {
+        let index = arr.indexOf(inputValue)
+        arr.splice(index, 1);
+        window.localStorage.setItem("name", JSON.stringify(arr))
+      }
+    }
+
+
+    Sortable.create(listItem, {
+      handle: 'li',
+      animation: 150,
+      onEnd: function (evt) {
+        let arr = JSON.parse(window.localStorage.getItem("name"));
+        let oldIndex = evt.oldIndex;
+        let newIndex = evt.newIndex;
+        let elementValue = arr[oldIndex]
+        console.log(oldIndex,newIndex,elementValue)
+        if(oldIndex < newIndex){
+          for (let i = oldIndex; i <= newIndex; i++) {
+          // console.log(arr[oldIndex],"before")
+          arr[i] = arr[i + 1]
+          // console.log(arr[oldIndex],"ayu")
+        }
+        }else{
+          for (let i = oldIndex; i >= newIndex; i--) {
+          // console.log(arr[oldIndex],"before")
+          arr[i] = arr[i - 1]
+          // console.log(arr[oldIndex],"after")
+        }
+        }
+        
+        arr[newIndex]=elementValue
+        window.localStorage.setItem("name", JSON.stringify(arr))
+        console.log(evt, "onend")
+      }
+    });
+
+
+
+
+
+
+
+
+
+  </script>
+
+</body>
+
+</html>

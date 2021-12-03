@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+  <h1> date Range</h1>
+
+  <script>
+  const dateRange = ['Jan 2021 – Present', '2017 – Dec 2020', 'Dec 2014 – Feb 2017', 'Nov 2012 – 2014']
+  var sum = 0
+  const splitedArry = dateRange.map((item) => {
+    const tmpArry = item.split(' – ');
+    return {
+      startDate: tmpArry[0],
+      endDate: tmpArry[1],      
+    }
+  });
+
+  
+  for (const element of splitedArry) {
+    sum += test(new Date(element.startDate == "Present" ? new Date() : element.startDate), new Date(element.endDate == "Present" ? new Date(): element.endDate));     
+  }
+  console.log((sum / 12 | 0) + " years and " + sum % 12 + " months",)
+
+
+  function monthDiff(d1, d2) {
+      var months;
+      months = (d2.getFullYear() - d1.getFullYear()) * 12;
+      months -= d1.getMonth();
+      months += d2.getMonth();
+      return months <= 0 ? 0 : months;
+    }
+
+function test(d1, d2) {
+    var diff = monthDiff(d1, d2);
+    console.log(
+        d1.toISOString().substring(0, 10),
+        "to",
+        d2.toISOString().substring(0, 10),
+        ":",
+        diff,
+        ":",
+        (diff / 12 | 0) + " years and " + diff % 12 + " months" ,   
+                
+    );
+    return parseInt(diff)
+}
+
+  </script>
+</body>
+
+</html>

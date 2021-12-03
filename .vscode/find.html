@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+  <h1>Find and findIndex , arrary</h1>
+  <script>
+    //let data = [10, 20, 7, 50, 1, 100]
+    let data = [
+      { id: 10 ,name:"Ayushi"},
+      { id: 20,name:"Abhi" },
+      { id: 7 ,name:"Aman"}
+    ]
+    ///find and findIndex first value which is find first in array
+
+    // let result = data.find((num) => num > 50)
+    // console.log(result)
+
+    // findIndex Find the position 
+
+    //  let result = data.findIndex((num) => num < 7)
+    // console.log(result)
+
+
+    // how to Pass Function when we find 
+    // function Custom(num){
+    //   return num < 50
+    // }
+    // let result = data.find(Custom)
+    // console.log(result)
+
+    //Allow two condition also
+    // let result = data.find((num) => num > 20 && num < 100)
+    // console.log(result)
+
+    let result = data.find((num) => num.id < 50)
+    console.log(result)
+    //function Custom(num){
+    //   return num.id < 50
+    // }
+  </script>
+</body>
+
+</html>

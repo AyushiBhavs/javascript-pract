@@ -1,0 +1,108 @@
+<html>
+
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <link rel="stylesheet" href="popup.css">
+</head>
+
+<body style="width: 400px;height: 300px;">
+  <div class="container">
+    <h2 style="color:#dce8f0;" class="text-center">JoinEight</h2>
+    <div class="form-cont">
+      <form id="signin-form" name="user" action="http://blog.joineight.com/api/v1/users/signin" method="post">
+        <div class="form-group">
+          <label for="email">Email address</label>
+          <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email"
+            name="user[email]">
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" class="form-control" id="password" placeholder="Password" name="user[password]">
+        </div>
+        <div>
+          <label id="showError" class="error"></label>
+        </div>
+        <button type="submit" class="btn btn-primary login-btn">Submit</button>
+      </form>
+    </div>
+    <div class="user-info d-none">
+      <span>Active User: <b class="user-name"></b></span><br />
+      <button class="btn btn-link logout-btn">Logout</button>
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function () {
+  var current_user;
+  var token;
+  // chrome.storage.local.get(['current_user', 'token'], function (items) {
+    const items ={}
+    current_user = items?.current_user;
+    token = items?.token;
+    if (token != undefined && token != '') {
+      $('.form-cont').hide();
+      $('.user-info').removeClass('d-none');
+      $('.user-name').html(current_user.first_name);
+    }
+  // });
+
+  $('.logout-btn').click((e) => {
+    e.preventDefault();
+    // chrome.storage.local.remove(['token', 'current_user']);
+    $('.form-cont').show();
+    $('.user-info').addClass('d-none');
+    $('.user-name').html('');
+  });
+
+  $('#signin-form').validate({
+    rules: {
+      'user[email]': {
+        required: true,
+        email: true,
+      },
+      'user[password]': {
+        required: true,
+      },
+    },
+    messages: {
+      'user[email]': 'Please enter a valid email address',
+      'user[password]': 'Please provide a password',
+    },
+    submitHandler: function (form) {
+      var jqForm = $(form);
+      var url = jqForm.attr('action');
+      $.ajax({
+        type: 'POST',
+        url: url,
+        data: jqForm.serialize(), // serializes the form's elements.
+        beforeSend: function () {
+          $('#showError').hide().html('');
+        },
+        success: function (data) {
+          $('.form-cont').hide();
+          $('.user-info').removeClass('d-none');
+          $('.user-name').html(data.response.first_name);
+          // chrome.storage.local.set({ 'current_user': data.response });
+          // console.log('data.response.token', data.response.token)
+          // chrome.storage.local.set({ 'token': data.response.token });
+          $('#signin-form input').val('');
+        },
+        error: function (data) {
+          if (data && data.responseJSON && data.responseJSON.error) {
+            let err = '';
+            data.responseJSON.error.forEach((str) => {
+              err += str;
+            });
+            $('#showError').html(err).show();
+          }
+        },
+      });
+    },
+  });
+});
+  </script>
+</body>
+
+</html>
